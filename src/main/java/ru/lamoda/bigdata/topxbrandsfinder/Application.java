@@ -25,19 +25,19 @@ public class Application {
     }
 
     public void run() throws IOException {
-        writeToCsv(getTopXByCount(), "byCount");
-        writeToCsv(getTopXByTime(), "byTime");
+        writeToCsv(getTopXByCount(appConfig.getLogsDir(), appConfig.getDictDir()), "byCount");
+        writeToCsv(getTopXByTime(appConfig.getLogsDir(), appConfig.getDictDir()), "byTime");
     }
 
-    private Dataset<Row> getTopXByCount() {
+    public Dataset<Row> getTopXByCount(String pathToLogs, String pathToDic) {
         Dataset<Row> logs = sparkContextHolder.getSparkSession()
                 .read()
                 .option("header", "true") //first line in file has headers
-                .csv(appConfig.getLogsDir() + "*");
+                .csv(pathToLogs + "*");
         Dataset<Row> dictionary = sparkContextHolder.getSparkSession()
                 .read()
                 .option("header", "true") //first line in file has headers
-                .csv(appConfig.getDictDir() + "*");
+                .csv(pathToDic + "*");
         return logs.join(
                 broadcast(dictionary),
                 dictionary.col("item_id").equalTo(logs.col("url").substr(19, 100)),
@@ -49,15 +49,15 @@ public class Application {
                 .filter("rank <= " + appConfig.getTopX());
     }
 
-    private Dataset<Row> getTopXByTime() {
+    public Dataset<Row> getTopXByTime(String pathToLogs, String pathToDic) {
         Dataset<Row> logs = sparkContextHolder.getSparkSession()
                 .read()
                 .option("header", "true") //first line in file has headers
-                .csv(appConfig.getLogsDir() + "*");
+                .csv(pathToLogs + "*");
         Dataset<Row> dictionary = sparkContextHolder.getSparkSession()
                 .read()
                 .option("header", "true") //first line in file has headers
-                .csv(appConfig.getDictDir() + "*");
+                .csv(pathToDic + "*");
         return logs.join(
                 broadcast(dictionary),
                 dictionary.col("item_id").equalTo(logs.col("url").substr(19, 100)),
