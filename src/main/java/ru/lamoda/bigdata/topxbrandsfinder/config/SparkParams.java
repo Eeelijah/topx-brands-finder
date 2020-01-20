@@ -14,7 +14,7 @@ public class SparkParams {
     private String maxExecutors;
     private String thriftUrl;
 
-    SparkParams(Config conf) {
+    public SparkParams(Config conf) {
         master = conf.getString("spark.master");
         queue = conf.getString("spark.queue");
         driverMemory = conf.getString("spark.driverMemory");

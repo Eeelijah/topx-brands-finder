@@ -13,13 +13,13 @@ import java.time.LocalDate;
 
 import static org.apache.spark.sql.functions.*;
 
-class Application {
+public class Application {
     private static final Logger logger = LoggerFactory.getLogger(Application.class.getName());
 
     private final SparkContextHolder sparkContextHolder;
     private final AppConfig appConfig;
 
-    Application(Config config) {
+    public Application(Config config) {
         appConfig = new AppConfig(config);
         sparkContextHolder = new SparkContextHolder(appConfig);
     }

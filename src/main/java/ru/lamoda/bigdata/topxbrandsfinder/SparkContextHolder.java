@@ -9,12 +9,12 @@ import ru.lamoda.bigdata.topxbrandsfinder.config.AppConfig;
 import ru.lamoda.bigdata.topxbrandsfinder.config.SparkParams;
 
 @Getter
-class SparkContextHolder {
+public class SparkContextHolder {
 
     private final SparkSession sparkSession;
     private final JavaSparkContext javaSparkContext;
 
-    SparkContextHolder(AppConfig appConfig) {
+    public SparkContextHolder(AppConfig appConfig) {
 
         SparkConf sparkConf = new SparkConf();
         sparkConf.set("spark.serializer", KryoSerializer.class.getName());
